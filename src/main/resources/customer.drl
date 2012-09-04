@@ -1,0 +1,10 @@
+package foo.bar.drools;
+
+import foo.bar.model.Customer;
+import foo.bar.model.Country;
+
+rule "Does"
+    when c: Customer( age >= 20 && ( age % 2 == 0 ), country == Country.DE )
+then
+    insert ( "Germany, even years old");
+end
