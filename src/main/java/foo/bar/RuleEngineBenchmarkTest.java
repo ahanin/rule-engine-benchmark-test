@@ -33,14 +33,50 @@ public class RuleEngineBenchmarkTest {
     private static final Gender[] GENDERS = Gender.values();
     private static final MaritalStatus[] MARITAL_STATUSES = MaritalStatus.values();
 
-    private final ArrayList<Case> testCases;
+    private final int numCases;
 
     public static void main(final String[] args) {
         new RuleEngineBenchmarkTest(Integer.valueOf(args[0])).test();
     }
 
     public RuleEngineBenchmarkTest(final int numCases) {
-        testCases = new ArrayList<Case>(numCases);
+        this.numCases = numCases;
+    }
+
+    private void test() {
+        final ArrayList<Case> testCases = generateRandomTestCases(numCases);
+
+        logger.log(Level.INFO, "Warming up");
+
+        runTests(generateRandomTestCases(10000)); // warm up
+
+        logger.log(Level.INFO, "Running the tests");
+
+        final List<BenchmarkResult> results = runTests(testCases); // run the tests
+
+        for (BenchmarkResult result : results) {
+            final long nanoTimeSpent = result.getNanoTimeSpent();
+            final double secondsSpent = TimeUtils.nanoSecondsToSeconds(nanoTimeSpent);
+            logger.log(Level.INFO, "{0}: {1,number,#.##} case/s ({2,number,#.##} cases, {3}s)",
+                new Object[] {
+                    result.getTestName(), (double) testCases.size() / secondsSpent, testCases.size(), secondsSpent
+                });
+
+        }
+    }
+
+    private List<BenchmarkResult> runTests(final ArrayList<Case> testCases) {
+        final List<BenchmarkResult> results = new LinkedList<BenchmarkResult>();
+
+        for (BenchmarkTest test : TESTS) {
+            results.add(test.process(testCases));
+        }
+
+        return results;
+    }
+
+    private ArrayList<Case> generateRandomTestCases(final int numCases) {
+        final ArrayList<Case> testCases = new ArrayList<Case>(numCases);
         for (int i = 0; i < numCases; i++) {
             final Case aCase = new Case();
 
@@ -58,24 +94,7 @@ public class RuleEngineBenchmarkTest {
             testCases.add(aCase);
         }
 
-    }
-
-    private void test() {
-        final List<BenchmarkResult> results = new LinkedList<BenchmarkResult>();
-
-        for (BenchmarkTest test : TESTS) {
-            results.add(test.process(testCases));
-        }
-
-        for (BenchmarkResult result : results) {
-            final long nanoTimeSpent = result.getNanoTimeSpent();
-            final double secondsSpent = TimeUtils.nanoSecondsToSeconds(nanoTimeSpent);
-            logger.log(Level.INFO, "{0}: {1,number,#.##} case/s ({2,number,#.##} cases, {3}s)",
-                new Object[] {
-                    result.getTestName(), (double) testCases.size() / secondsSpent, testCases.size(), secondsSpent
-                });
-
-        }
+        return testCases;
     }
 
 }
