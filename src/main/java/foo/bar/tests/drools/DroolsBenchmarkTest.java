@@ -42,7 +42,7 @@ public class DroolsBenchmarkTest extends BenchmarkTest {
         final StopWatch stopWatch = new StopWatch();
 
         final KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
-        kbuilder.add(ResourceFactory.newClassPathResource("salutation.drl"), ResourceType.DRL);
+        kbuilder.add(ResourceFactory.newClassPathResource("drools/salutation.drl"), ResourceType.DRL);
         if (kbuilder.hasErrors()) {
             for (KnowledgeBuilderError error : kbuilder.getErrors()) {
                 logger.log(Level.SEVERE, "{0} @ {1}: {2}",

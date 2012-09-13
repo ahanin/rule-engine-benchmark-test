@@ -29,6 +29,11 @@
             <artifactId>org.openl.core</artifactId>
             <version>${openl-tablets.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openl.rules</groupId>
+            <artifactId>org.openl.rules</artifactId>
+            <version>${openl-tablets.version}</version>
+        </dependency>
     </dependencies>
     
 </project>

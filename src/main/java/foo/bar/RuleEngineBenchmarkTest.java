@@ -16,7 +16,7 @@ import foo.bar.model.Gender;
 import foo.bar.model.MaritalStatus;
 
 import foo.bar.tests.drools.DroolsBenchmarkTest;
-import foo.bar.tests.openl.OpenLTabletsBenchmarkTest;
+import foo.bar.tests.openltablets.OpenLTabletsBenchmarkTest;
 
 import foo.bar.util.TimeUtils;
 
