@@ -36,7 +36,7 @@ public class RuleEngineBenchmarkTest {
     private final ArrayList<Case> testCases;
 
     public static void main(final String[] args) {
-        new RuleEngineBenchmarkTest(5000).test();
+        new RuleEngineBenchmarkTest(Integer.valueOf(args[0])).test();
     }
 
     public RuleEngineBenchmarkTest(final int numCases) {

@@ -9,6 +9,7 @@
     <version>1.0</version>
 
     <properties>
+        <testCases>5000</testCases>
         <drools.version>5.4.0.Final</drools.version>
         <openl-tablets.version>5.9.3.1</openl-tablets.version>
     </properties>
@@ -35,5 +36,36 @@
             <version>${openl-tablets.version}</version>
         </dependency>
     </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <phase>verify</phase>
+                        <configuration>
+                            <mainClass>foo.bar.RuleEngineBenchmarkTest</mainClass>
+                            <arguments>
+                                <argument>${testCases}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     
 </project>
