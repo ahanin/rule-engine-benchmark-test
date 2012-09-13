@@ -1,0 +1,83 @@
+package foo.bar.drools;
+
+import foo.bar.model.Case;
+import foo.bar.model.Customer;
+import foo.bar.model.Gender;
+import foo.bar.model.MaritalStatus;
+
+import foo.bar.model.Greeting;
+import foo.bar.model.Salutation;
+
+
+
+# Greeting
+
+rule "Greeting: Good Morning"
+    when
+        Case ( hourOfDay >= 0, hourOfDay < 12)
+    then
+        insert (Greeting.GOOD_MORNING);
+end
+
+rule "Greeting: Good Afternoon"
+    when
+        Case ( hourOfDay >= 12, hourOfDay < 18)
+    then
+        insert (Greeting.GOOD_AFTERNOON);
+end
+
+rule "Greeting: Good Evening"
+    when
+        Case ( hourOfDay >= 18, hourOfDay < 23)
+    then
+        insert (Greeting.GOOD_EVENING);
+end
+
+rule "Greeting: Good Night"
+    when
+        Case ( hourOfDay >= 23, hourOfDay <= 24)
+    then
+        insert (Greeting.GOOD_NIGHT);
+end
+
+
+
+# Salutation
+
+rule "Salutation: Mr."
+    when
+        Case ( $c: customer )
+        Customer ( gender == Gender.MALE ) from $c 
+    then
+        insert ( Salutation.MR );
+end
+
+rule "Salutation: Ms."
+    when
+        Case ( $c: customer )        
+        Customer ( gender == Gender.FEMALE ) from $c
+        Customer ( maritalStatus == MaritalStatus.SINGLE ) from $c 
+    then
+        insert ( Salutation.MS );
+end
+
+rule "Salutation: Mrs."
+    when
+        Case ( $c: customer )
+        Customer ( gender == Gender.FEMALE ) from $c
+        Customer ( maritalStatus == MaritalStatus.MARRIED ) from $c
+    then
+        insert ( Salutation.MRS );
+end
+
+
+
+# Hello
+rule "Say Hello"
+    when
+        Case ( $c: customer )
+        $salutation: Salutation()
+        $greeting: Greeting()
+    then
+        System.out.printf("%s, %s %s\n", $greeting.getLiteral(), $salutation.getLiteral(), $c.getName() );
+end

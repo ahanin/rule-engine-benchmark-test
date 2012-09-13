@@ -3,49 +3,79 @@
  */
 package foo.bar;
 
-import foo.bar.drools.DroolsBenchmarkTest;
-import foo.bar.model.Case;
-import foo.bar.model.Country;
-import foo.bar.model.Customer;
-
-import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import foo.bar.model.Case;
+import foo.bar.model.Customer;
+import foo.bar.model.Gender;
+import foo.bar.model.MaritalStatus;
+
+import foo.bar.tests.drools.DroolsBenchmarkTest;
+import foo.bar.tests.openl.OpenLTabletsBenchmarkTest;
+
+import foo.bar.util.TimeUtils;
 
 public class RuleEngineBenchmarkTest {
 
-    private static final BenchmarkTest[] TESTS = new BenchmarkTest[]{
-            new DroolsBenchmarkTest()
+    private final Logger logger = Logger.getLogger(getClass().getName());
+
+    private static final BenchmarkTest[] TESTS = new BenchmarkTest[] {
+        new DroolsBenchmarkTest(), new OpenLTabletsBenchmarkTest()
     };
 
-    public static void main(String[] args) {
-        final int numCases = 1000;
+    private static final Random random = new Random();
 
-        final ArrayList<Case> cases = new ArrayList<Case>(numCases);
+    private static final Gender[] GENDERS = Gender.values();
+    private static final MaritalStatus[] MARITAL_STATUSES = MaritalStatus.values();
+
+    private final ArrayList<Case> testCases;
+
+    public static void main(final String[] args) {
+        new RuleEngineBenchmarkTest(5000).test();
+    }
+
+    public RuleEngineBenchmarkTest(final int numCases) {
+        testCases = new ArrayList<Case>(numCases);
         for (int i = 0; i < numCases; i++) {
             final Case aCase = new Case();
+
+            final MaritalStatus maritalStatus = MARITAL_STATUSES[Math.abs(random.nextInt()) % MARITAL_STATUSES.length];
+            final Gender gender = GENDERS[Math.abs(random.nextInt()) % GENDERS.length];
+
             final Customer customer = new Customer();
+            customer.setGender(gender);
+            customer.setMaritalStatus(maritalStatus);
             customer.setName("John Doe");
-            customer.setCountry(Country.DE);
-            customer.setAge(20 + i % 10);
+
             aCase.setCustomer(customer);
-            cases.add(aCase);
+            aCase.setHourOfDay(Math.abs(random.nextInt()) % 24);
+
+            testCases.add(aCase);
         }
 
-        System.out.println(new Date());
+    }
+
+    private void test() {
+        final List<BenchmarkResult> results = new LinkedList<BenchmarkResult>();
+
         for (BenchmarkTest test : TESTS) {
-            final long start = System.nanoTime();
-
-            test.process(cases);
-
-            final long finish = System.nanoTime();
-
-            System.out.println(MessageFormat.format(
-                    "{0}: {1} case/s", test.getName(),
-                    (double) cases.size() / ((double) (finish - start) / Math.pow(10d, 9) * 1000))
-            );
+            results.add(test.process(testCases));
         }
-        System.out.println(new Date());
+
+        for (BenchmarkResult result : results) {
+            final long nanoTimeSpent = result.getNanoTimeSpent();
+            final double secondsSpent = TimeUtils.nanoSecondsToSeconds(nanoTimeSpent);
+            logger.log(Level.INFO, "{0}: {1,number,#.##} case/s ({2,number,#.##} cases, {3}s)",
+                new Object[] {
+                    result.getTestName(), (double) testCases.size() / secondsSpent, testCases.size(), secondsSpent
+                });
+
+        }
     }
 
 }
