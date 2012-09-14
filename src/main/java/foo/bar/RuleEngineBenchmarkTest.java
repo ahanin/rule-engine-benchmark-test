@@ -16,8 +16,10 @@ import foo.bar.model.Gender;
 import foo.bar.model.MaritalStatus;
 
 import foo.bar.tests.drools.DroolsBenchmarkTest;
+import foo.bar.tests.jesse.JesseReteBenchmarkTest;
 import foo.bar.tests.openltablets.OpenLTabletsBenchmarkTest;
 
+import foo.bar.util.StopWatch;
 import foo.bar.util.TimeUtils;
 
 public class RuleEngineBenchmarkTest {
@@ -25,7 +27,7 @@ public class RuleEngineBenchmarkTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private static final BenchmarkTest[] TESTS = new BenchmarkTest[] {
-        new DroolsBenchmarkTest(), new OpenLTabletsBenchmarkTest()
+        new DroolsBenchmarkTest(), new OpenLTabletsBenchmarkTest(), new JesseReteBenchmarkTest()
     };
 
     private static final Random random = new Random();
@@ -34,21 +36,38 @@ public class RuleEngineBenchmarkTest {
     private static final MaritalStatus[] MARITAL_STATUSES = MaritalStatus.values();
 
     private final int numCases;
+    private final int numWarmUpCases;
 
-    public static void main(final String[] args) {
-        new RuleEngineBenchmarkTest(Integer.valueOf(args[0])).test();
+    public static void main(final String[] args) throws Exception {
+        final Integer numWarmUpCases;
+        if (args.length > 1) {
+            numWarmUpCases = Integer.valueOf(args[1]);
+        } else {
+            numWarmUpCases = 0;
+        }
+        final Integer numCases = Integer.valueOf(args[0]);
+        new RuleEngineBenchmarkTest(numCases, numWarmUpCases).test();
     }
 
-    public RuleEngineBenchmarkTest(final int numCases) {
+    public RuleEngineBenchmarkTest(final int numCases, final Integer numWarmUpCases) {
         this.numCases = numCases;
+        this.numWarmUpCases = numWarmUpCases;
     }
 
-    private void test() {
+    private void test() throws Exception {
         final ArrayList<Case> testCases = generateRandomTestCases(numCases);
 
-        logger.log(Level.INFO, "Warming up");
+        logger.log(Level.INFO, "Preparing tests");
+        for (BenchmarkTest test : TESTS) {
+            final StopWatch stopWatch = new StopWatch();
+            test.prepare();
+            logger.log(Level.INFO, "{0} prepared in {1}s", new Object[] {test.getName(), stopWatch.formatSeconds()});
+        }
 
-        runTests(generateRandomTestCases(10000)); // warm up
+        if (numWarmUpCases > 0) {
+            logger.log(Level.INFO, "Warming up");
+            runTests(generateRandomTestCases(numWarmUpCases)); // warm up
+        }
 
         logger.log(Level.INFO, "Running the tests");
 

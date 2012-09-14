@@ -36,9 +36,7 @@ public class DroolsBenchmarkTest extends BenchmarkTest {
     }
 
     @Override
-    protected void prepare() {
-        logger.log(Level.INFO, "Initializing knowledge base");
-
+    protected void prepare() throws Exception {
         final StopWatch stopWatch = new StopWatch();
 
         final KnowledgeBuilder kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder();
@@ -49,13 +47,11 @@ public class DroolsBenchmarkTest extends BenchmarkTest {
                     new Object[] {error.getResource(), error.getLines()[0], error.getMessage()});
             }
 
-            throw new RuntimeException("Compilation error. Cannot proceed. See logs for details.");
+            throw new Exception("Compilation error. Cannot proceed. See logs for details.");
         }
 
         kbase = KnowledgeBaseFactory.newKnowledgeBase();
         kbase.addKnowledgePackages(kbuilder.getKnowledgePackages());
-
-        logger.log(Level.INFO, "Knowledge based initialized in {0}s", stopWatch.formatSeconds());
     }
 
     @Override

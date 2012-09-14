@@ -18,7 +18,7 @@ public class OpenLTabletsBenchmarkTest extends BenchmarkTest {
     }
 
     @Override
-    protected void prepare() {
+    protected void prepare() throws Exception {
         final EngineFactory<IExample> engineFactory = new RuleEngineFactory<IExample>(getClass().getClassLoader()
                     .getResource("openltablets/HelloExcelCustomer.xls"), IExample.class);
         instance = engineFactory.makeInstance();

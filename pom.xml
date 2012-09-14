@@ -12,6 +12,7 @@
         <testCases>5000</testCases>
         <drools.version>5.4.0.Final</drools.version>
         <openl-tablets.version>5.9.3.1</openl-tablets.version>
+        <jessrules.version>7.1p2</jessrules.version>
     </properties>
 
     <dependencies>
@@ -34,6 +35,13 @@
             <groupId>org.openl.rules</groupId>
             <artifactId>org.openl.rules</artifactId>
             <version>${openl-tablets.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jessrules</groupId>
+            <artifactId>jessrules</artifactId>
+            <version>${jessrules.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/maven/jess71p2/jess.jar</systemPath>
         </dependency>
     </dependencies>
     

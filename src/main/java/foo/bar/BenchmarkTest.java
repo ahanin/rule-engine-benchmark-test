@@ -17,13 +17,11 @@ public abstract class BenchmarkTest {
 
     public abstract String getName();
 
-    protected abstract void prepare();
+    protected abstract void prepare() throws Exception;
 
     protected abstract void process(final Case aCase);
 
     public final BenchmarkResult process(final Collection<Case> cases) {
-        prepare();
-
         final BenchmarkResult result = new BenchmarkResult();
 
         final StopWatch stopWatch = new StopWatch();
