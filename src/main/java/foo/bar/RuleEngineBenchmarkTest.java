@@ -105,7 +105,7 @@ public class RuleEngineBenchmarkTest {
             final Customer customer = new Customer();
             customer.setGender(gender);
             customer.setMaritalStatus(maritalStatus);
-            customer.setName("John Doe");
+            customer.setName("Smith");
 
             aCase.setCustomer(customer);
             aCase.setHourOfDay(Math.abs(random.nextInt()) % 24);

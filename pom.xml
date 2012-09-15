@@ -10,9 +10,10 @@
 
     <properties>
         <testCases>5000</testCases>
+        <warmUpTestCases>0</warmUpTestCases>
         <drools.version>5.4.0.Final</drools.version>
         <openl-tablets.version>5.9.3.1</openl-tablets.version>
-        <jessrules.version>7.1p2</jessrules.version>
+        <jess.version>7.1p2</jess.version>
     </properties>
 
     <dependencies>
@@ -37,18 +38,18 @@
             <version>${openl-tablets.version}</version>
         </dependency>
         <dependency>
-            <groupId>jessrules</groupId>
-            <artifactId>jessrules</artifactId>
-            <version>${jessrules.version}</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/maven/jess71p2/jess.jar</systemPath>
+            <groupId>jess</groupId>
+            <artifactId>jess</artifactId>
+            <version>${jess.version}</version>
         </dependency>
     </dependencies>
     
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
                 <configuration>
                     <source>1.5</source>
                     <target>1.5</target>
@@ -68,6 +69,7 @@
                             <mainClass>foo.bar.RuleEngineBenchmarkTest</mainClass>
                             <arguments>
                                 <argument>${testCases}</argument>
+                                <argument>${warmUpTestCases}</argument>
                             </arguments>
                         </configuration>
                     </execution>
