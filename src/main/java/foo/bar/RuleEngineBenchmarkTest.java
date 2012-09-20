@@ -9,7 +9,7 @@ import foo.bar.model.Gender;
 import foo.bar.model.MaritalStatus;
 
 import foo.bar.tests.drools.DroolsBenchmarkTest;
-import foo.bar.tests.jesse.JesseReteBenchmarkTest;
+import foo.bar.tests.jesse.JessReteBenchmarkTest;
 import foo.bar.tests.openltablets.OpenLTabletsBenchmarkTest;
 
 import foo.bar.util.HeapDumper;
@@ -32,7 +32,7 @@ public class RuleEngineBenchmarkTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
     private static final BenchmarkTest[] TESTS = new BenchmarkTest[] {
             new DroolsBenchmarkTest(), new OpenLTabletsBenchmarkTest(),
-            new JesseReteBenchmarkTest()
+            new JessReteBenchmarkTest()
         };
     private static final Random random = new Random();
     private static final Gender[] GENDERS = Gender.values();

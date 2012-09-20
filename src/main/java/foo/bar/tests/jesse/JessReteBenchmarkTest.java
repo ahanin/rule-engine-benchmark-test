@@ -4,23 +4,25 @@ import foo.bar.BenchmarkTest;
 import foo.bar.model.Case;
 import jess.JessException;
 import jess.Rete;
+import jess.WorkingMemoryMarker;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
 
-public class JesseReteBenchmarkTest extends BenchmarkTest {
+public class JessReteBenchmarkTest extends BenchmarkTest {
 
     private static final String GREETING_RULE = "jesse/salutation.clp";
     private Rete rete;
+    private WorkingMemoryMarker beginMark;
 
     @Override
     public String getName() {
-        return "jesse";
+        return "jess";
     }
 
     @Override
     public String getDisplayName() {
-        return "Jesse 7.1 Rete";
+        return "Jess 7.1 Rete";
     }
 
     @Override
@@ -32,13 +34,13 @@ public class JesseReteBenchmarkTest extends BenchmarkTest {
         }
         final String file = url.getFile();
         rete.batch(file);
-        rete.reset();
+        beginMark = rete.mark();
     }
 
     @Override
     protected void process(final Case aCase) {
         try {
-            rete.reset();
+            rete.resetToMark(beginMark);
             rete.add(aCase);
             rete.run();
         } catch (JessException e) {
