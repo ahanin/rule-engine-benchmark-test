@@ -32,6 +32,11 @@ public class DroolsBenchmarkTest extends BenchmarkTest {
 
     @Override
     public String getName() {
+        return "drools";
+    }
+
+    @Override
+    public String getDisplayName() {
         return "Drools 5.4.0.Final";
     }
 

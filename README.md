@@ -66,3 +66,12 @@ test cases will run for all implemented tests, but the results will be ignored. 
 with *warmUpTestCases* property:
 
     mvn verify -DtestCases=5000 -DwarmUpTestCases=100
+
+If you want to run only particular tests, use *tests* property to set test names separated by comma:
+
+    mvn verify -Dtests=drools,jess
+
+If you need to evaluate memory footprint, you can have a heap-dump file after the execution, by setting *heapDumpFile*
+property (works only on Sun JVM):
+
+    mvn verify -Dtests=drools -DheapDumpFile=drools.bin

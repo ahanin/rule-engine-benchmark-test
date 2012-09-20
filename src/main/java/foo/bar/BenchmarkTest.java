@@ -17,6 +17,8 @@ public abstract class BenchmarkTest {
 
     public abstract String getName();
 
+    public abstract String getDisplayName();
+
     protected abstract void prepare() throws Exception;
 
     protected abstract void process(final Case aCase);

@@ -15,6 +15,11 @@ public class JesseReteBenchmarkTest extends BenchmarkTest {
 
     @Override
     public String getName() {
+        return "jesse";
+    }
+
+    @Override
+    public String getDisplayName() {
         return "Jesse 7.1 Rete";
     }
 

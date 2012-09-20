@@ -14,6 +14,11 @@ public class OpenLTabletsBenchmarkTest extends BenchmarkTest {
 
     @Override
     public String getName() {
+        return "openltablets";
+    }
+
+    @Override
+    public String getDisplayName() {
         return "OpenL Tablets 5.9.3.1";
     }
 
